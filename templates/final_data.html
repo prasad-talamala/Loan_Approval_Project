@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block component %}
+
+<div class="container">
+    <div class="display:inline">
+        <h4><strong>Loan Dashboard</strong> <a href="{% url 'userform' %}">Enquire a new loan</a></h4>
+    </div>
+    {% if error %}
+    <h4 style="color:red; font-size:small;">{{ error }}</h4>
+    {% elif success %}
+    <h4 style="color:green; font-size:small;">{{ success }}</h4>
+    {% endif %}
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead class="thead-light">
+            <tr>
+                <th>Enquiry ID</th>
+                <th>Customer Name</th>
+                <th>Job type</th>
+                <th>Loan Amount</th>
+                <th>Interest Rate</th>
+                <th>Loan Status</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for each in data %}
+            <tr>
+                <td>{{each.enquiry_id}}</td>
+                <td>{{each.customer_name}}</td>
+                <td>{{each.job_type}}</td>
+                <td>{{each.loan_amount}}</td>
+                <td>{{each.interest_rate}}</td>
+                {% if each.status == "Pending" %}
+                <td><span class="label label-danger">{{each.status}}</span></td>
+                {% elif each.status == "Recommended" %}
+                <td><span class="label label-warning">{{each.status}}</span></td>
+                {% elif each.status == "Approved" %}
+                <td><span class="label label-success">{{each.status}}</span></td>
+                {% endif %}
+
+                {% if not user.is_superuser %}
+                {% if each.status == "Approved" %}
+                <td style="width:3%">
+                    <button class="btn btn-warning" disabled>Recommend</button>
+                </td>
+                <td style="width:3%">
+                    <button class="btn btn-success" disabled>Approve</button>
+                </td>
+                {% elif each.status == "Recommended" %}
+                <td style="width:3%">
+                    <button class="btn btn-warning" disabled>Recommend</button>
+                </td>
+                <td style="width:3%">
+                    <button class="btn btn-success" disabled>Approve</button>
+                </td>
+                {% else %}
+                <td style="width:3%">
+                    <form action="{% url 'updatestatus' each.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" name='mybtns' class="btn btn-warning" value="recommend">Recommend</button>
+                    </form>
+                </td>
+                <td style="width:3%">
+                    <button class="btn btn-success" disabled>Approve</button>
+                </td>
+                {% endif %}
+
+                {% else %}
+
+                {% if each.status == "Approved" %}
+                <td style="width:3%">
+                    <button class="btn btn-warning" disabled>Recommend</button>
+                </td>
+                <td style="width:3%">
+                    <button class="btn btn-success" disabled>Approve</button>
+                </td>
+                {% elif each.status == "Recommended" %}
+                <td style="width:3%">
+                    <button class="btn btn-warning" disabled>Recommend</button>
+                </td>
+                <td style="width:3%">
+                    <form action="{% url 'updatestatus' each.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" name='mybtns' class="btn btn-success" value="approve">Approve</button>
+                    </form>
+                </td>
+                {% else %}
+                <td style="width:3%">
+                    <form action="{% url 'updatestatus' each.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" name='mybtns' class="btn btn-warning" value="recommend">Recommend</button>
+                    </form>
+                </td>
+                <td style="width:3%">
+                    <form action="{% url 'updatestatus' each.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" name='mybtns' class="btn btn-success" value="approve">Approve</button>
+                    </form>
+                </td>
+                {% endif %}
+                {% endif %}
+            </tr>
+            {% endfor %}
+            </tbody>
+
+        </table>
+        <p style="color:red">Note: only ADMIN can approve the loan..</p>
+        <p>If you want to recommend your loan to admin then click on Recommend button</p>
+
+        {% if data.has_other_pages %}
+        <ul class="pagination">
+            {% if data.has_previous %}
+            <li><a href="?page={{ data.previous_page_number }}">&laquo;</a></li>
+            {% else %}
+            <li class="disabled"><span>&laquo;</span></li>
+            {% endif %}
+            {% for i in data.paginator.page_range %}
+            {% if data.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+            {% else %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if data.has_next %}
+            <li><a href="?page={{ data.next_page_number }}">&raquo;</a></li>
+            {% else %}
+            <li class="disabled"><span>&raquo;</span></li>
+            {% endif %}
+        </ul>
+        {% endif %}
+
+    </div>
+</div>
+
+
+{% endblock %}

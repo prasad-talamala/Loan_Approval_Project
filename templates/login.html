@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block component %}
+
+<div class="container">
+
+    <h1>Login</h1>
+
+    {% if error %}
+        <h4 style="color:red; font-size:small;">{{ error }}</h4>
+    {% else %}
+        <br>
+    {% endif %}
+
+    <form method="POST" action="{% url 'login' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-primary" type="submit">Login</button>
+    </form>
+
+</div>
+
+{% endblock %}

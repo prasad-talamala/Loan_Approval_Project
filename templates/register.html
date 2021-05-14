@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block component %}
+
+<style>
+
+    .form-control:read-only {
+        background-color: white;
+        opacity: 1;
+    }
+
+</style>
+
+<div class="container">
+
+    <h1>Sign Up</h1>
+
+    {% if error %}
+        <h4 style="color:red; font-size:small;">{{ error }}</h4>
+    {% else %}
+        <br>
+    {% endif %}
+
+    <form method="POST" action="{% url 'register' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-primary" type="submit">Sign up</button>
+    </form>
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block component %}
+
+<style>
+
+    .form-control:read-only {
+        background-color: white;
+        opacity: 1;
+    }
+
+</style>
+
+<div class="container">
+
+    <form method="POST">
+        {% csrf_token %}
+        <h4>Customer Loan Request <a href="{% url 'finaldata' %}">Loan Dashboard</a></h4>
+        <hr>
+        <div>
+            <label>Enquiry Name: </label><span style="color:red"> [Note: Enquiry Name must be less than 10 characters.] </span>
+            <input class="form-control" type="text" name="enquiryid">
+        </div>
+        <br>
+        <div>
+            <label>Customer Name: </label><span style="color:red"> [Note: Customer Name should match with your Aadhar Name.] </span>
+            <input class="form-control" type="text" name="customername">
+        </div>
+        <br>
+        <div>
+            <label>Job type: </label>
+            <select name="jobtype" class="form-control">
+                <option selected="selected">---Select---</option>
+                <option value="Self Employed">Self Employed</option>
+                <option value="Salaried">Salaried</option>
+            </select>
+        </div>
+        <br>
+        <div>
+            <label>Loan Amount: </label>
+            <input class="form-control" type="text" name="loanamount">
+        </div>
+        <br>
+        <div>
+            <label>Interest Rate: </label>
+            <input class="form-control" type="text" name="interestrate">
+        </div>
+        <br>
+
+        <button class="btn btn-primary" type="submit">Submit</button>
+
+    </form>
+</div>
+
+
+{% endblock %}

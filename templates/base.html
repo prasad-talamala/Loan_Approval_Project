@@ -1,0 +1,41 @@
+{% load static %}
+<!--<!doctype html>-->
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <title>Web Application</title>
+</head>
+<body>
+
+<div>
+    <nav class="navbar navbar-dark">
+        <div class="container">
+            {% if user.is_authenticated %}
+            <h3>Welcome 🙏 , {{ user.first_name }} {{ user.last_name }} <a style="float:right" class="btn btn-default"
+                                                                           href="{% url 'logout' %}"><span
+                    class="glyphicon glyphicon-off"></span></a></h3>
+
+            {% else %}
+            <div class="btn-group btn-group-justified">
+                <a class="btn btn-primary" href="{% url 'home' %}"><h4><span class="glyphicon glyphicon-home"> Home</span></h4></a>
+                <a class="btn btn-primary" href="/admin/"><h4><span class="glyphicon glyphicon-user"> Admin</span></h4></a>
+                <a class="btn btn-primary" href="{% url 'register' %}"><h4><span class="glyphicon glyphicon-registration-mark"> Register</span></h4></a>
+                <a class="btn btn-primary" href="{% url 'login' %}"><h4><span class="glyphicon glyphicon-hand-right"> Login</span></h4></a>
+            </div>
+            {% endif %}
+        </div>
+
+    </nav>
+</div>
+
+{% block component %}
+
+{% endblock %}
+
+</body>
+</html>
